@@ -1,24 +1,59 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
+import type { Language } from "./model";
+import { getProducts } from "./api";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const displayProducts = async (language: Language) => {
+  const products = await getProducts(language);
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+  const appContainer = document.getElementById("app");
+  if (!appContainer) {
+    console.error("App container (#app) not found in the DOM.");
+    return;
+  }
+
+  let productsContainer = document.getElementById("products");
+  if (!productsContainer) {
+    productsContainer = document.createElement("div");
+    productsContainer.id = "products";
+    appContainer.appendChild(productsContainer);
+  }
+
+  productsContainer.innerHTML = "";
+
+  products.forEach((product) => {
+    const productElement = document.createElement("div");
+    productElement.innerHTML = `
+      <img src="${product.image.url}" alt="${product.name}" style="max-width:300px" />
+      <h2>${product.name}</h2>
+      <p>${product.description}</p>
+      <small>Price: ${product.price}</small>
+    `;
+    productsContainer.appendChild(productElement);
+  });
+};
+
+const setupLanguageSelector = () => {
+  const appContainer = document.getElementById("app");
+  if (!appContainer) {
+    console.error("App container (#app) not found.");
+    return;
+  }
+
+  const languageSelector = document.createElement("select");
+  languageSelector.id = "language-selector";
+  languageSelector.innerHTML = `
+    <option value="en">English</option>
+    <option value="es">Español</option>
+  `;
+
+  languageSelector.addEventListener("change", (event) => {
+    const selectedLanguage = (event.target as HTMLSelectElement)
+      .value as Language;
+    displayProducts(selectedLanguage);
+  });
+
+  appContainer.prepend(languageSelector);
+};
+
+setupLanguageSelector();
+displayProducts("en");
