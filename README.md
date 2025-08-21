@@ -1,6 +1,6 @@
-# Content Island × Multi languaje support
+# Content Island × Multilingual support
 
-> This repository contains the **complete example** that accompanies the Content Island tutorial **“Advanced Multilanguage Support.”**
+> This repository contains the **complete example** that accompanies the Content Island tutorial **“Advanced Multilingual Support.”**
 > Follow the tutorial: **https://docs.contentisland.net/advanced/multilang/**
 > Learn more about Content Island: **https://contentisland.net/**
 
